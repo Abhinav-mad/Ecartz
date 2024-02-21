@@ -3,16 +3,22 @@ import { Button, Card, Col, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { removeFromWishlist } from  '../redux/slice/wishlistslice'
+import { addToCart } from '../redux/slice/cartslice'
 
 function Wishlist() {
 
   const wishlistArray = useSelector((state)=>state.wishlistReducer)
   const dispatch = useDispatch()
+  const  handleWishlistcart=(product)=>{
+    dispatch(addToCart(product))
+    dispatch(removeFromWishlist(product.id))
+   }
 
   return (
     <div style={{ marginTop: '100px' }}>
-      <Row>{
-        wishlistArray.length>0? wishlistArray.map((product, index) => {
+      <Row>
+        {
+        wishlistArray.length>0? wishlistArray.map((product,index) => (
 
           <Col className='mb-5' sm={12} lg={4} xl={3} md={6} key={index}>
 
@@ -26,7 +32,7 @@ function Wishlist() {
                 </Card.Text>
                 <div className="d-flex justify-content-between">
                   <Button onClick={()=>dispatch(removeFromWishlist(product.id))}  className='btn btn-light'><i className='fa-solid fa-trash text-danger fa-lg'></i></Button>
-                  <Button className='btn btn-light'><i className='fa-solid fa-cart-shopping text-warning'></i></Button>
+                  <Button onClick={()=>handleWishlistcart(product)} className='btn btn-light'><i className='fa-solid fa-cart-shopping text-warning'></i></Button>
 
 
                 </div>
@@ -34,7 +40,7 @@ function Wishlist() {
             </Card>
 
           </Col>
-        }) : <div style={{height:'100vh'}} className="d-flex w-100 flex-column justify-content-center align-items-center">
+        )) : <div style={{height:'100vh'}} className="d-flex w-100 flex-column justify-content-center align-items-center">
           <img height={'500px'} src='' alt="" />
           <h3 className='text-center text-danger'>Wishlist is empty</h3>
           <Link style={{textDecoration:'none'}} className='btn btn-primary rounded' to={'/'}>Back to Home</Link>
